@@ -27,20 +27,32 @@
   programs.bash = {
     enable = true;
     shellAliases = {
+    };
+  };
+
+  programs.zsh = {
+    enable = true;
+    shellAliases = {
       rebuild = "sudo nixos-rebuild switch";
       hms = "home-manager switch";
     };
     initExtra = ''
       export PATH="$PATH:$HOME/go/bin/"
     '';
+
+    oh-my-zsh = {
+      enable = true;
+      theme = "bira";
+      plugins = ["git"];
+    };
   };
 
   #programs.neovim = {
-  #	enable = true;
-  #	defaultEditor = true;
-  #	vimAlias = true;
-  #	vimdiffAlias = true;
-  #	withNodeJs = false;
+  # enable = true;
+  # defaultEditor = true;
+  # vimAlias = true;
+  # vimdiffAlias = true;
+  # withNodeJs = false;
   # };
 
   programs.nvf = {
@@ -69,6 +81,7 @@
         shiftwidth = 2;
         softtabstop = 2;
         expandtab = true;
+        backup = false;
       };
 
       vim.keymaps = [
