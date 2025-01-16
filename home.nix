@@ -68,6 +68,10 @@
       vim.languages.enableFormat = true;
       vim.lsp.formatOnSave = true;
 
+      vim.autocomplete.nvim-cmp.enable = true;
+      vim.autocomplete.nvim-cmp.mappings.next = "<C-n>";
+      vim.autocomplete.nvim-cmp.mappings.previous = "<C-p>";
+
       vim.languages.nix.enable = true;
       vim.languages.go.enable = true;
       vim.languages.lua.enable = true;
