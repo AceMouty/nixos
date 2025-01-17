@@ -8,6 +8,7 @@
     allowUnfree = true;
   };
 
+  fonts.fontconfig.enable = true;
   home = {
     username = "ace";
     homeDirectory = "/home/ace";
@@ -21,6 +22,7 @@
       jetbrains.rider
       vscode
       go
+      (pkgs.nerdfonts.override {fonts = ["JetBrainsMono"];})
     ];
   };
 
@@ -67,6 +69,7 @@
       vim.languages.enableTreesitter = true;
       vim.languages.enableFormat = true;
       vim.lsp.formatOnSave = true;
+      vim.lsp.trouble.enable = true;
 
       vim.autocomplete.nvim-cmp.enable = true;
       vim.autocomplete.nvim-cmp.mappings.next = "<C-n>";
@@ -124,6 +127,12 @@
           action = "<C-w>l";
           silent = true;
           noremap = true;
+        }
+        {
+          key = "<leader>e";
+          mode = "n";
+          silent = true;
+          action = "<cmd>lua vim.diagnostic.open_float({ scope = 'line' })<CR>";
         }
       ];
 
