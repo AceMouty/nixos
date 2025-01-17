@@ -24,12 +24,6 @@
     ];
   };
 
-  programs.bash = {
-    enable = true;
-    shellAliases = {
-    };
-  };
-
   programs.zsh = {
     enable = true;
     shellAliases = {
