@@ -87,12 +87,15 @@
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
+  # Docker
+  virtualisation.docker.enable = true;
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.defaultUserShell = pkgs.zsh;
   users.users.ace = {
     isNormalUser = true;
     description = "ace";
-    extraGroups = ["networkmanager" "wheel"];
+    extraGroups = ["networkmanager" "wheel" "docker"];
     shell = pkgs.zsh;
   };
 
@@ -113,6 +116,8 @@
     efibootmgr
     kitty
     xclip
+    docker
+    docker-compose
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

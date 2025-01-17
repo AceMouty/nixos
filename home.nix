@@ -35,9 +35,15 @@
     shellAliases = {
       rebuild = "sudo nixos-rebuild switch";
       hms = "home-manager switch";
+      pg-shell = "nix-shell $HOME/nixos/shells/postgres.nix";
     };
     initExtra = ''
       export PATH="$PATH:$HOME/go/bin/"
+
+      # Check if in nix-shell and update the prompt
+      if [[ -n "$IN_NIX_SHELL" ]]; then
+        export PS1="$PS1 (nix-shell)"
+      fi
     '';
 
     oh-my-zsh = {
@@ -95,6 +101,35 @@
           silent = true;
           noremap = true;
           action = "<Esc>";
+        }
+        # Move to split
+        {
+          mode = "n";
+          key = "<C-h>";
+          action = "<C-w>h";
+          silent = true;
+          noremap = true;
+        }
+        {
+          mode = "n";
+          key = "<C-j>";
+          action = "<C-w>j";
+          silent = true;
+          noremap = true;
+        }
+        {
+          mode = "n";
+          key = "<C-k>";
+          action = "<C-w>k";
+          silent = true;
+          noremap = true;
+        }
+        {
+          mode = "n";
+          key = "<C-l>";
+          action = "<C-w>l";
+          silent = true;
+          noremap = true;
         }
       ];
 
