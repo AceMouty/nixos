@@ -136,7 +136,7 @@
         };
 
         mappings = {
-          open = "<c-j>";
+          open = "<C-p>";
         };
       };
     };
