@@ -70,26 +70,6 @@
       vim.languages.enableFormat = true;
       vim.lsp.formatOnSave = true;
       vim.lsp.trouble.enable = true;
-      #vim.lsp.lspconfig = {
-      #  enable = true;
-      #  sources = {
-      #    gopls = ''
-      #      local lspconfig = require("lspconfig")
-      #      local capabilities = require("cmp_nvim_lsp").default_capabilities()
-
-      #      -- gopls setup
-      #      lspconfig.gopls.setup({
-      #        capabilities = capabilities,
-      #        settings = {
-      #          gopls = {
-      #            completeUnimported = true,
-      #            usePlaceholders = true, -- Enable placeholders in function signatures
-      #          },
-      #        },
-      #      })
-      #    '';
-      #  };
-      #};
 
       vim.autocomplete.nvim-cmp.enable = true;
       vim.autocomplete.nvim-cmp.mappings.next = "<C-n>";
