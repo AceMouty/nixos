@@ -51,6 +51,7 @@
   # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm.enable = true;
   services.xserver.desktopManager.plasma5.enable = true;
+
   services.xserver.windowManager.qtile = {
     enable = true;
     extraPackages = python3Packages:
@@ -119,6 +120,9 @@
     docker
     docker-compose
     bruno
+    btop
+    ffmpeg
+    awscli2
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

@@ -18,13 +18,17 @@
       brave
       bat
       git
-      dotnetCorePackages.sdk_8_0_3xx
       jetbrains.rider
+      jetbrains.idea-ultimate
       vscode
+      dotnetCorePackages.sdk_8_0_3xx
       go
       (pkgs.nerdfonts.override {fonts = ["JetBrainsMono"];})
+      postman
     ];
   };
+
+  programs.java.enable = true;
 
   programs.zsh = {
     enable = true;
