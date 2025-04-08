@@ -9,35 +9,44 @@
     home-manager.url = "github:nix-community/home-manager/release-24.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     nvf.url = "github:notashelf/nvf";
-
+    emacs-overlay.url = "github:nix-community/emacs-overlay"; # Overlay for Emacs 28+
   };
 
-  outputs = {self, nixpkgs, home-manager, nvf, ...}: 
-    let
-      lib = nixpkgs.lib;
-      pkgs = nixpkgs.legacyPackages."x86_64-linux";
-    in
-    {
-      # NixOS config
-      nixosConfigurations = {
-        # nixos: matches host name defined in cofiguration.nix
-        nixos = lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [ ./configuration.nix ];
-        };
-      };
-
-      # Home-Manager config
-      homeConfigurations = {
-        # nixos: matches host name defined in cofiguration.nix
-        ace = home-manager.lib.homeManagerConfiguration {
-          inherit pkgs;
-          modules = [ 
-            nvf.homeManagerModules.default # enable nvf module
-            ./home.nix
-          ];
-        };
-      };
-
+  outputs = {
+    self,
+    nixpkgs,
+    home-manager,
+    nvf,
+    emacs-overlay,
+    ...
+  }: let
+    lib = nixpkgs.lib;
+    # pkgs = nixpkgs.legacyPackages."x86_64-linux";
+    pkgs = import nixpkgs {
+      overlays = [emacs-overlay.overlay];
+      # Ensure we are using legacyPackages for the proper system architecture
+      system = "x86_64-linux";
     };
+  in {
+    # NixOS config
+    nixosConfigurations = {
+      # nixos: matches host name defined in cofiguration.nix
+      nixos = lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [./configuration.nix];
+      };
+    };
+
+    # Home-Manager config
+    homeConfigurations = {
+      # nixos: matches host name defined in cofiguration.nix
+      ace = home-manager.lib.homeManagerConfiguration {
+        inherit pkgs;
+        modules = [
+          nvf.homeManagerModules.default # enable nvf module
+          ./home.nix
+        ];
+      };
+    };
+  };
 }

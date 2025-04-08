@@ -123,6 +123,11 @@
     btop
     ffmpeg
     awscli2
+    ripgrep
+    coreutils
+    fd
+    clang
+    emacsGcc # Emacs with native-comp support
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
