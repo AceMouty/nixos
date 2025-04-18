@@ -11,6 +11,9 @@
     ./hardware-configuration.nix
   ];
 
+  # Allow unfree packages
+  nixpkgs.config.allowUnfree = true;
+
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -85,6 +88,8 @@
     #media-session.enable = true;
   };
 
+  services.emacs.enable = true;
+
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
@@ -106,12 +111,10 @@
   # Install zsh.
   programs.zsh.enable = true;
 
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    xorg.xinit
     vim
     home-manager
     efibootmgr
@@ -127,7 +130,13 @@
     coreutils
     fd
     clang
-    emacsGcc # Emacs with native-comp support
+    emacs
+    python3
+    libvterm
+    cmake
+    gnumake
+    libtool
+    tree
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

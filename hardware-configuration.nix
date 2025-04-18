@@ -12,7 +12,7 @@
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
 
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;
   };
 

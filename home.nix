@@ -28,17 +28,16 @@
     ];
   };
 
-  programs.java.enable = true;
-
   programs.zsh = {
     enable = true;
     shellAliases = {
       rebuild = "sudo nixos-rebuild switch";
-      hms = "home-manager switch";
+      hms = "home-manager switch --flake $HOME/nixos/home-manager#ace";
       pg-shell = "nix-shell $HOME/nixos/shells/postgres.nix";
     };
     initExtra = ''
       export PATH="$PATH:$HOME/go/bin/"
+      export PATH="$PATH:$HOME/.config/emacs/bin"
 
       # Check if in nix-shell and update the prompt
       if [[ -n "$IN_NIX_SHELL" ]]; then
@@ -53,14 +52,6 @@
     };
   };
 
-  #programs.neovim = {
-  # enable = true;
-  # defaultEditor = true;
-  # vimAlias = true;
-  # vimdiffAlias = true;
-  # withNodeJs = false;
-  # };
-
   programs.nvf = {
     enable = true;
     enableManpages = true;
@@ -74,26 +65,6 @@
       vim.languages.enableFormat = true;
       vim.lsp.formatOnSave = true;
       vim.lsp.trouble.enable = true;
-      #vim.lsp.lspconfig = {
-      #  enable = true;
-      #  sources = {
-      #    gopls = ''
-      #      local lspconfig = require("lspconfig")
-      #      local capabilities = require("cmp_nvim_lsp").default_capabilities()
-
-      #      -- gopls setup
-      #      lspconfig.gopls.setup({
-      #        capabilities = capabilities,
-      #        settings = {
-      #          gopls = {
-      #            completeUnimported = true,
-      #            usePlaceholders = true, -- Enable placeholders in function signatures
-      #          },
-      #        },
-      #      })
-      #    '';
-      #  };
-      #};
 
       vim.autocomplete.nvim-cmp.enable = true;
       vim.autocomplete.nvim-cmp.mappings.next = "<C-n>";
