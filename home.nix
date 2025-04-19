@@ -8,6 +8,8 @@
     allowUnfree = true;
   };
 
+  sdkman.enable = true;
+
   fonts.fontconfig.enable = true;
   home = {
     username = "ace";

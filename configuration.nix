@@ -137,6 +137,9 @@
     gnumake
     libtool
     tree
+    unzip
+    zip
+    curl
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
