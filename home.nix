@@ -8,25 +8,12 @@
     allowUnfree = true;
   };
 
-  sdkman.enable = true;
-
   fonts.fontconfig.enable = true;
   home = {
     username = "ace";
     homeDirectory = "/home/ace";
     stateVersion = "24.11";
     packages = with pkgs; [
-      flameshot
-      brave
-      bat
-      git
-      jetbrains.rider
-      jetbrains.idea-ultimate
-      vscode
-      dotnetCorePackages.sdk_8_0_3xx
-      go
-      (pkgs.nerdfonts.override {fonts = ["JetBrainsMono"];})
-      postman
     ];
   };
 

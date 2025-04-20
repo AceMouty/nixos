@@ -97,6 +97,7 @@
   virtualisation.docker.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
+  programs.zsh.enable = true;
   users.defaultUserShell = pkgs.zsh;
   users.users.ace = {
     isNormalUser = true;
@@ -105,41 +106,45 @@
     shell = pkgs.zsh;
   };
 
-  # Install firefox.
-  programs.firefox.enable = true;
-
-  # Install zsh.
-  programs.zsh.enable = true;
-
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    xorg.xinit
-    vim
-    home-manager
-    efibootmgr
-    kitty
-    xclip
-    docker
-    docker-compose
+    (pkgs.nerdfonts.override {fonts = ["JetBrainsMono"];})
+    awscli2
+    bat
+    brave
     bruno
     btop
-    ffmpeg
-    awscli2
-    ripgrep
-    coreutils
-    fd
     clang
-    emacs
-    python3
-    libvterm
     cmake
+    coreutils
+    curl
+    docker
+    docker-compose
+    dotnetCorePackages.sdk_8_0_3xx
+    efibootmgr
+    emacs
+    fd
+    ffmpeg
+    firefox
+    flameshot
+    git
     gnumake
+    go
+    home-manager
+    jetbrains.idea-ultimate
+    jetbrains.rider
+    kitty
     libtool
+    libvterm
+    postman
+    python3
+    ripgrep
     tree
     unzip
+    vscode
+    xclip
     zip
-    curl
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
