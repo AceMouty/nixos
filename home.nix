@@ -2,8 +2,11 @@
   config,
   pkgs,
   lib,
+  inputs,
   ...
 }: {
+  imports = [inputs.nvf.homeManagerModules.default];
+
   nixpkgs.config = {
     allowUnfree = true;
   };
@@ -13,8 +16,6 @@
     username = "ace";
     homeDirectory = "/home/ace";
     stateVersion = "24.11";
-    packages = with pkgs; [
-    ];
   };
 
   programs.zsh = {

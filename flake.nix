@@ -2,42 +2,41 @@
   description = "NixOS flake";
 
   inputs = {
-    # uncomment for unstable
+    # select stable or unstable
     # nixpkgs.url = "nixpkgs/nixos-unstable";
-
     nixpkgs.url = "nixpkgs/nixos-24.11"; # same as github:NixOs/nixpkgs/nixos-24.11
+
     home-manager.url = "github:nix-community/home-manager/release-24.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
     nvf.url = "github:notashelf/nvf";
   };
 
   outputs = {
-    self,
     nixpkgs,
     home-manager,
     nvf,
     ...
-  }: let
+  } @ inputs: let
     lib = nixpkgs.lib;
-    pkgs = nixpkgs.legacyPackages."x86_64-linux";
   in {
     # NixOS config
     nixosConfigurations = {
       # nixos: matches host name defined in cofiguration.nix
       nixos = lib.nixosSystem {
         system = "x86_64-linux";
-        modules = [./configuration.nix];
-      };
-    };
-
-    # Home-Manager config
-    homeConfigurations = {
-      ace = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
+        #home-manager
         modules = [
-          nvf.homeManagerModules.default # enable nvf module
-          ./home.nix
-          ./homeManagerModules
+          ./configuration.nix
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            # create a backup of some existing file not managed by hm
+            home-manager.backupFileExtension = "backup";
+            home-manager.extraSpecialArgs = {inherit inputs;};
+            home-manager.users.ace = ./home.nix;
+          }
         ];
       };
     };
