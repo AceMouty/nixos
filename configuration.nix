@@ -73,8 +73,8 @@
   services.printing.enable = true;
 
   # Enable sound with pipewire.
-  hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
+  services.pulseaudio.enable = false;
   services.pipewire = {
     enable = true;
     alsa.enable = true;
@@ -109,7 +109,8 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    (pkgs.nerdfonts.override {fonts = ["JetBrainsMono"];})
+#    (pkgs.nerdfonts.override {fonts = ["JetBrainsMono"];})
+    pkgs.nerd-fonts.jetbrains-mono
     awscli2
     bat
     brave

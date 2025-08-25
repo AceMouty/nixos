@@ -4,9 +4,9 @@
   inputs = {
     # select stable or unstable
     # nixpkgs.url = "nixpkgs/nixos-unstable";
-    nixpkgs.url = "nixpkgs/nixos-24.11"; # same as github:NixOs/nixpkgs/nixos-24.11
+    nixpkgs.url = "nixpkgs/nixos-25.05"; # same as github:NixOs/nixpkgs/nixos-24.11
 
-    home-manager.url = "github:nix-community/home-manager/release-24.11";
+    home-manager.url = "github:nix-community/home-manager/release-25.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     nvf.url = "github:notashelf/nvf";

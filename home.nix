@@ -25,7 +25,7 @@
       hms = "home-manager switch --flake $HOME/nixos/home-manager#ace";
       pg-shell = "nix-shell $HOME/nixos/shells/postgres.nix";
     };
-    initExtra = ''
+    initContent = ''
       export PATH="$PATH:$HOME/go/bin/"
       export PATH="$PATH:$HOME/.config/emacs/bin"
 
@@ -48,9 +48,10 @@
     settings = {
       vim.viAlias = true;
       vim.vimAlias = true;
-      vim.useSystemClipboard = true;
+      #vim.useSystemClipboard = true;
 
-      vim.languages.enableLSP = true;
+      #vim.languages.enableLSP = true;
+      vim.lsp.enable = true;
       vim.languages.enableTreesitter = true;
       vim.languages.enableFormat = true;
       vim.lsp.formatOnSave = true;
