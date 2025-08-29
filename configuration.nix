@@ -55,14 +55,6 @@
   services.displayManager.sddm.enable = true;
   services.xserver.desktopManager.plasma5.enable = true;
 
-  services.xserver.windowManager.qtile = {
-    enable = true;
-    extraPackages = python3Packages:
-      with python3Packages; [
-        qtile-extras
-      ];
-  };
-
   # Configure keymap in X11
   services.xserver.xkb = {
     layout = "us";
@@ -108,8 +100,9 @@
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
+  programs.hyprland.enable = true;
   environment.systemPackages = with pkgs; [
-#    (pkgs.nerdfonts.override {fonts = ["JetBrainsMono"];})
+    #    (pkgs.nerdfonts.override {fonts = ["JetBrainsMono"];})
     pkgs.nerd-fonts.jetbrains-mono
     awscli2
     bat
@@ -138,11 +131,16 @@
     kitty
     libtool
     libvterm
+    networkmanagerapplet
+    networkmanager
     postman
     python3
     ripgrep
+    rofi
+    swww
     tree
     unzip
+    waybar
     vscode
     xclip
     zip

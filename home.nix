@@ -18,6 +18,10 @@
     stateVersion = "24.11";
   };
 
+  # not the best but yolo
+  wayland.windowManager.hyprland.enable = true;
+  xdg.configFile."hypr".source = ./config/hypr;
+
   programs.zsh = {
     enable = true;
     shellAliases = {
@@ -39,6 +43,13 @@
       enable = true;
       theme = "bira";
       plugins = ["git"];
+    };
+  };
+
+  programs.kitty = {
+    enable = true;
+    settings = {
+      confirm_os_window_close = 0;
     };
   };
 
