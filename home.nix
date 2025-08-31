@@ -49,6 +49,7 @@
   programs.kitty = {
     enable = true;
     settings = {
+      font_family = "JetBrainsMono Nerd Font";
       confirm_os_window_close = 0;
     };
   };

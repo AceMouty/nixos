@@ -53,7 +53,13 @@
 
   # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm.enable = true;
-  services.xserver.desktopManager.plasma5.enable = true;
+  services.desktopManager.plasma6.enable = true;
+  services.dbus.enable = true;
+  security.polkit.enable = true;
+  security.pam.services.sddm.enable = true;
+  security.pam.services.sddm.kwallet.enable = true;
+  security.pam.services.sddm.kwallet.package = pkgs.kdePackages.kwallet-pam;
+  security.pam.services.login.kwallet.enable = true;
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -69,9 +75,11 @@
   services.pulseaudio.enable = false;
   services.pipewire = {
     enable = true;
+    audio.enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
+    wireplumber.enable = true;
     # If you want to use JACK applications, uncomment this
     #jack.enable = true;
 
@@ -94,19 +102,20 @@
   users.users.ace = {
     isNormalUser = true;
     description = "ace";
-    extraGroups = ["networkmanager" "wheel" "docker"];
+    extraGroups = ["networkmanager" "wheel" "docker" "audio" "video"];
     shell = pkgs.zsh;
   };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   programs.hyprland.enable = true;
+  fonts.fontDir.enable = true;
   environment.systemPackages = with pkgs; [
-    #    (pkgs.nerdfonts.override {fonts = ["JetBrainsMono"];})
-    pkgs.nerd-fonts.jetbrains-mono
+    nerd-fonts.jetbrains-mono
     awscli2
     bat
     brave
+    brightnessctl
     bruno
     btop
     clang
@@ -128,15 +137,19 @@
     home-manager
     jetbrains.idea-ultimate
     jetbrains.rider
+    kdePackages.kwallet
+    kdePackages.kwalletmanager
+    kdePackages.kwallet-pam
     kitty
     libtool
     libvterm
-    networkmanagerapplet
     networkmanager
     postman
+    polkit_gnome
     python3
     ripgrep
     rofi
+    socat
     swww
     tree
     unzip
