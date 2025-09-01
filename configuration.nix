@@ -48,18 +48,13 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  # Enable the X11 windowing system.
   services.xserver.enable = true;
-
-  # Enable the KDE Plasma Desktop Environment.
-  services.displayManager.sddm.enable = true;
-  services.desktopManager.plasma6.enable = true;
   services.dbus.enable = true;
+  # Gnome...
+  services.xserver.displayManager.gdm.enable = true;
+  services.xserver.desktopManager.gnome.enable = true;
+
   security.polkit.enable = true;
-  security.pam.services.sddm.enable = true;
-  security.pam.services.sddm.kwallet.enable = true;
-  security.pam.services.sddm.kwallet.package = pkgs.kdePackages.kwallet-pam;
-  security.pam.services.login.kwallet.enable = true;
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -97,13 +92,12 @@
   virtualisation.docker.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  programs.zsh.enable = true;
-  users.defaultUserShell = pkgs.zsh;
+  programs.fish.enable = true;
   users.users.ace = {
     isNormalUser = true;
     description = "ace";
     extraGroups = ["networkmanager" "wheel" "docker" "audio" "video"];
-    shell = pkgs.zsh;
+    shell = pkgs.fish;
   };
 
   # List packages installed in system profile. To search, run:
@@ -132,17 +126,18 @@
     firefox
     flameshot
     git
+    gnome-tweaks
+    gnome-keyring
+    polkit_gnome
     gnumake
     go
     home-manager
     jetbrains.idea-ultimate
     jetbrains.rider
-    kdePackages.kwallet
-    kdePackages.kwalletmanager
-    kdePackages.kwallet-pam
     kitty
     libtool
     libvterm
+    apple-cursor
     networkmanager
     postman
     polkit_gnome
