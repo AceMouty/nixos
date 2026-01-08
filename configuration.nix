@@ -18,7 +18,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "nixos"; 
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
@@ -91,13 +91,18 @@
   # Docker
   virtualisation.docker.enable = true;
 
+  # needed for sdkman
+  programs.nix-ld.enable = true;
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   programs.fish.enable = true;
+  programs.zsh.enable = true;
+
   users.users.ace = {
     isNormalUser = true;
     description = "ace";
     extraGroups = ["networkmanager" "wheel" "docker" "audio" "video"];
-    shell = pkgs.fish;
+    shell = pkgs.zsh;
   };
 
   # List packages installed in system profile. To search, run:
@@ -105,6 +110,7 @@
   programs.hyprland.enable = true;
   fonts.fontDir.enable = true;
   environment.systemPackages = with pkgs; [
+    apple-cursor
     nerd-fonts.jetbrains-mono
     awscli2
     bat
@@ -133,12 +139,14 @@
     go
     home-manager
     jetbrains.idea-ultimate
-    jetbrains.rider
     kitty
     libtool
     libvterm
-    apple-cursor
+    neovim
     networkmanager
+    networkmanagerapplet
+    nodejs_22
+    pnpm_9
     postman
     polkit_gnome
     python3
