@@ -6,8 +6,6 @@
 
     home-manager.url = "github:nix-community/home-manager/release-25.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-
-    # nvf.url = "github:NotAShelf/nvf";
   };
 
   outputs = {
@@ -31,6 +29,7 @@
             home-manager.useUserPackages = true;
             # create a backup of some existing file not managed by hm
             home-manager.backupFileExtension = "backup";
+	    # access inputs from home.nix
             home-manager.extraSpecialArgs = {inherit inputs;};
             home-manager.users.ace = ./home.nix;
           }

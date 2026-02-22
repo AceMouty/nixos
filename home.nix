@@ -5,7 +5,9 @@
   inputs,
   ...
 }: {
-  # imports = [inputs.nvf.homeManagerModules.default];
+  imports = [
+    ./modules/neovim
+  ];
 
   nixpkgs.config = {
     allowUnfree = true;
@@ -56,6 +58,7 @@
       "DEFAULT_AUDIO_SOURCE" = null;
     };
   };
+  xdg.configFile."nvim".source = ./config/nvim;
 
   programs.zsh = {
     enable = true;
@@ -80,13 +83,6 @@
     };
   };
 
-  # programs.fish = {
-  #   enable = true;
-  #   interactiveShellInit = ''
-  #     # user defined config
-  #   '';
-  # };
-
   programs.kitty = {
     enable = true;
     settings = {
@@ -94,99 +90,4 @@
       confirm_os_window_close = 0;
     };
   };
-
-  # programs.nvf = {
-  #   enable = true;
-  #   enableManpages = true;
-  #   settings = {
-  #     vim.viAlias = true;
-  #     vim.vimAlias = true;
-  #     #vim.useSystemClipboard = true;
-
-  #     #vim.languages.enableLSP = true;
-  #     vim.lsp.enable = true;
-  #     vim.languages.enableTreesitter = true;
-  #     vim.languages.enableFormat = true;
-  #     vim.lsp.formatOnSave = true;
-  #     vim.lsp.trouble.enable = true;
-
-  #     vim.autocomplete.nvim-cmp.enable = true;
-  #     vim.autocomplete.nvim-cmp.mappings.next = "<C-n>";
-  #     vim.autocomplete.nvim-cmp.mappings.previous = "<C-p>";
-
-  #     vim.languages.nix.enable = true;
-  #     vim.languages.go.enable = true;
-  #     vim.languages.lua.enable = true;
-
-  #     vim.globals = {
-  #       mapleader = " ";
-  #     };
-
-  #     vim.options = {
-  #       tabstop = 2;
-  #       shiftwidth = 2;
-  #       softtabstop = 2;
-  #       expandtab = true;
-  #       backup = false;
-  #     };
-
-  #     vim.keymaps = [
-  #       {
-  #         key = "jk";
-  #         mode = "i";
-  #         silent = true;
-  #         noremap = true;
-  #         action = "<Esc>";
-  #       }
-  #       # Move to split
-  #       {
-  #         mode = "n";
-  #         key = "<C-h>";
-  #         action = "<C-w>h";
-  #         silent = true;
-  #         noremap = true;
-  #       }
-  #       {
-  #         mode = "n";
-  #         key = "<C-j>";
-  #         action = "<C-w>j";
-  #         silent = true;
-  #         noremap = true;
-  #       }
-  #       {
-  #         mode = "n";
-  #         key = "<C-k>";
-  #         action = "<C-w>k";
-  #         silent = true;
-  #         noremap = true;
-  #       }
-  #       {
-  #         mode = "n";
-  #         key = "<C-l>";
-  #         action = "<C-w>l";
-  #         silent = true;
-  #         noremap = true;
-  #       }
-  #       {
-  #         key = "<leader>e";
-  #         mode = "n";
-  #         silent = true;
-  #         action = "<cmd>lua vim.diagnostic.open_float({ scope = 'line' })<CR>";
-  #       }
-  #     ];
-
-  #     vim.telescope.enable = true;
-  #     vim.terminal.toggleterm = {
-  #       enable = true;
-
-  #       setupOpts = {
-  #         direction = "float";
-  #       };
-
-  #       mappings = {
-  #         open = "<C-p>";
-  #       };
-  #     };
-  #   };
-  # };
 }
