@@ -1,4 +1,7 @@
 { config, pkgs, ...}:
+let
+ withOptPlugin = plugin: { inherit plugin; optional = true; };
+in
 {
     programs.neovim = {
     enable = true;
@@ -8,9 +11,9 @@
     plugins = with pkgs.vimPlugins; [
       { plugin = lz-n; }
       { plugin = nightfox-nvim; }
-      { plugin = nvim-treesitter; optional = true; }
-      { plugin = telescope-nvim; optional = true; }
-      { plugin = gitsigns-nvim; optional = true; }
+      (withOptPlugin nvim-treesitter)
+      (withOptPlugin telescope-nvim)
+      (withOptPlugin gitsigns-nvim)
 
       # parsers
       nvim-treesitter-parsers.nix
