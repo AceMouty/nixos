@@ -51,8 +51,8 @@
   services.xserver.enable = true;
   services.dbus.enable = true;
   # Gnome...
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
+  services.displayManager.gdm.enable = true;
+  services.desktopManager.gnome.enable = true;
 
   security.polkit.enable = true;
 
@@ -125,7 +125,6 @@
     curl
     docker
     docker-compose
-    dotnetCorePackages.sdk_8_0_3xx
     efibootmgr
     emacs
     fd
