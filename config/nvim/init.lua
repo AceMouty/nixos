@@ -186,12 +186,207 @@ require("lz.n").load({
     cmd = "Telescope",
     after = function()
       require("telescope").setup({})
+    end,
+  },
 
-      -- keymaps (only defined after telescope loads)
-      local builtin = require("telescope.builtin")
-      vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "Find files" })
-      vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Live grep" })
-      vim.keymap.set("n", "<leader>fb", builtin.buffers,   { desc = "Buffers" })
+  -- Neotree
+  {
+    "neo-tree.nvim",
+    cmd = "Neotree",
+    after = function()
+      require("neo-tree").setup({
+        filesystem = {
+          window = {
+            mappings = {
+              -- NOTE: default `l` is focus_preview in neo-tree; override it.
+              ["l"] = "open",       -- expand dir / open file
+              ["h"] = "close_node", -- collapse node
+              -- keep space toggle if you like:
+              ["<space>"] = "toggle_node",
+            },
+          },
+        },
+      })
+    end,
+  },
+  {
+    "nvim-cmp",
+    event = "InsertEnter",
+    after = function()
+      local cmp = require("cmp")
+
+      cmp.setup({
+        mapping = cmp.mapping.preset.insert({
+          ["<C-Space>"] = cmp.mapping.complete(),
+          ["<CR>"] = cmp.mapping.confirm({ select = true }),
+
+          ["<Tab>"] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_next_item()
+            else
+              fallback()
+            end
+          end, { "i", "s" }),
+
+          ["<S-Tab>"] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_prev_item()
+            else
+              fallback()
+            end
+          end, { "i", "s" }),
+        }),
+        sources = cmp.config.sources({
+          { name = "nvim_lsp" },
+          { name = "path" },
+          { name = "buffer" },
+        }),
+      })
     end,
   },
 })
+
+-- Telescope keymaps
+do
+  local tmap = require("lz.n").keymap({
+    "telescope.nvim",
+    cmd = "Telescope",
+  })
+
+  tmap.set("n", "<leader>ff", function()
+    require("telescope.builtin").find_files()
+  end, { desc = "Find files" })
+
+  tmap.set("n", "<leader>fg", function()
+    require("telescope.builtin").live_grep()
+  end, { desc = "Live grep" })
+
+  tmap.set("n", "<leader>fb", function()
+    require("telescope.builtin").buffers()
+  end, { desc = "Buffers" })
+end
+
+-- Neotree keymaps
+local nmap = require("lz.n").keymap({
+  "neo-tree.nvim",
+  cmd = "Neotree",
+})
+
+nmap.set("n", "<leader>e", "<cmd>Neotree toggle<cr>", { desc = "Explorer (neo-tree)" })
+
+--- ### LSP & Diagnostics ###
+vim.diagnostic.config({
+  virtual_text = true,
+  severity_sort = true,
+  float = { border = "rounded" },
+})
+
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(args)
+    local bufnr = args.buf
+    local map = function(mode, lhs, rhs, desc)
+      vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, silent = true, desc = desc })
+    end
+
+    map("n", "gd", vim.lsp.buf.definition, "Go to definition")
+    map("n", "gD", vim.lsp.buf.declaration, "Go to declaration")
+    map("n", "gr", vim.lsp.buf.references, "References")
+    map("n", "gi", vim.lsp.buf.implementation, "Implementation")
+    map("n", "K", vim.lsp.buf.hover, "Hover")
+    map("n", "<leader>rn", vim.lsp.buf.rename, "Rename")
+    map("n", "<leader>ca", vim.lsp.buf.code_action, "Code action")
+    map("n", "<leader>f", function() vim.lsp.buf.format({ async = true }) end, "Format")
+
+    if vim.lsp.inlay_hint then
+      map("n", "<leader>ih", function()
+        local enabled = vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr })
+        vim.lsp.inlay_hint.enable(not enabled, { bufnr = bufnr })
+      end, "Toggle inlay hints")
+    end
+  end,
+})
+
+-- ========== Native LSP server configs ==========
+-- Notes:
+-- - "cmd" must exist on PATH (Nix: add the language server binaries via home-manager packages)
+-- - "filetypes" decide which buffers should start the server
+-- - "root_markers" determine project root detection
+local function lsp_capabilities()
+  local base = vim.lsp.protocol.make_client_capabilities()
+  local ok, cmp = pcall(require, "cmp_nvim_lsp")
+  if ok then
+    return cmp.default_capabilities(base)
+  end
+  return base
+end
+
+
+vim.lsp.config("clangd", {
+  cmd = { "clangd", "--background-index", "--clang-tidy", "--completion-style=detailed", "--header-insertion=iwyu" },
+  filetypes = { "c", "cpp", "objc", "objcpp" },
+  root_markers = { "compile_commands.json", "compile_flags.txt", ".clangd", ".git" },
+  capabilities = lsp_capabilities()
+})
+
+vim.lsp.config("lua_ls", {
+  cmd = { "lua-language-server" },
+  filetypes = { "lua" },
+  root_markers = { ".luarc.json", ".luarc.jsonc", ".stylua.toml", "stylua.toml", ".git" },
+  capabilities = lsp_capabilities(),
+  settings = {
+    Lua = {
+      diagnostics = { globals = { "vim" } },
+      workspace = { checkThirdParty = false },
+      telemetry = { enable = false },
+    },
+  },
+})
+
+vim.lsp.config("nil_ls", {
+  cmd = { "nil" },
+  filetypes = { "nix" },
+  root_markers = { "flake.nix", "shell.nix", "default.nix", ".git" },
+  capabilities = lsp_capabilities()
+})
+
+-- Java: basic jdtls (works, but "real Java" usually wants nvim-jdtls later)
+vim.lsp.config("jdtls", {
+  cmd = { "jdtls" },
+  filetypes = { "java" },
+  root_markers = { "mvnw", "gradlew", "pom.xml", "build.gradle", "settings.gradle", ".git" },
+  capabilities = lsp_capabilities()
+})
+
+vim.lsp.enable({ "clangd", "lua_ls", "nil_ls", "jdtls" })
+
+-- LSP Format on save
+do
+  local formatters_by_ft = {
+    c = { "clangd" },
+    cpp = { "clangd" },
+    -- go = { "gopls" },
+    lua = { "lua_ls" },
+    nix = { "nil_ls" },
+    java = { "jdtls" },
+    -- javascript/typescript: use a dedicated formatter (prettier) instead of LSP
+    -- python: use ruff or black
+  }
+
+  vim.api.nvim_create_autocmd("BufWritePre", {
+    group = vim.api.nvim_create_augroup("LspFormatOnSaveByFt", { clear = true }),
+    callback = function(args)
+      local ft = vim.bo[args.buf].filetype
+      local preferred = formatters_by_ft[ft]
+      if not preferred then return end
+
+      vim.lsp.buf.format({
+        bufnr = args.buf,
+        timeout_ms = 2000,
+        filter = function(client)
+          return client.supports_method("textDocument/formatting")
+              and vim.tbl_contains(preferred, client.name)
+        end,
+      })
+    end,
+  })
+end

@@ -3,9 +3,15 @@
 
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-25.11"; # same as github:NixOs/nixpkgs/nixos-24.11
+    nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
 
     home-manager.url = "github:nix-community/home-manager/release-25.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
+    noctalia = {
+      url = "github:noctalia-dev/noctalia-shell";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
   };
 
   outputs = {
@@ -14,10 +20,15 @@
     ...
   } @ inputs: let
     lib = nixpkgs.lib;
+
+    pkgs-unstable = import inputs.nixpkgs-unstable {
+      system = "x86_64-linux";
+      config.allowUnfree = true;
+    };
   in {
     # NixOS config
     nixosConfigurations = {
-      # nixos: matches host name defined in cofiguration.nix
+      # @attr nixos: matches host name defined in cofiguration.nix
       nixos = lib.nixosSystem {
         system = "x86_64-linux";
         #home-manager
@@ -29,8 +40,8 @@
             home-manager.useUserPackages = true;
             # create a backup of some existing file not managed by hm
             home-manager.backupFileExtension = "backup";
-	    # access inputs from home.nix
-            home-manager.extraSpecialArgs = {inherit inputs;};
+	          # access inputs from home.nix
+            home-manager.extraSpecialArgs = { inherit inputs pkgs-unstable; };
             home-manager.users.ace = ./home.nix;
           }
         ];

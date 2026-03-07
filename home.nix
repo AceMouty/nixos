@@ -3,9 +3,11 @@
   pkgs,
   lib,
   inputs,
+  pkgs-unstable,
   ...
 }: {
   imports = [
+    inputs.noctalia.homeModules.default
     ./modules/neovim
   ];
 
@@ -18,9 +20,13 @@
     username = "ace";
     homeDirectory = "/home/ace";
     stateVersion = "24.11";
-    packages = with pkgs; [
+    packages = (with pkgs; [
       seahorse
       libsecret
+    ])
+    ++ [ # needed for noctalia
+      pkgs-unstable.quickshell
+      pkgs-unstable.qt6.qtwayland
     ];
     pointerCursor = {
       name = "macOS";
@@ -39,6 +45,12 @@
     extensions = with pkgs; [
       {package = gnomeExtensions.dash-to-dock;}
     ];
+  };
+
+
+  programs.noctalia-shell = {
+    enable = true;
+    systemd.enable = true;
   };
 
   dconf.settings = {
@@ -62,10 +74,15 @@
 
   programs.zsh = {
     enable = true;
+    sessionVariables = {
+      EDITOR = "nvim";
+    };
+
     shellAliases = {
       rebuild = "sudo nixos-rebuild switch --flake .";
       pg-shell = "nix-shell $HOME/nixos/shells/postgres.nix";
     };
+
     initContent = ''
       export PATH="$PATH:$HOME/go/bin/"
       export PATH="$PATH:$HOME/.config/emacs/bin"

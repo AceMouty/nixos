@@ -5,7 +5,11 @@
   config,
   pkgs,
   ...
-}: {
+}:
+let
+  hyprshot-gui = pkgs.callPackage ./pkgs/hyprshot-gui { };
+in
+{
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
@@ -29,6 +33,11 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
+
+  # noctalia things...
+  hardware.bluetooth.enable = true;
+  services.power-profiles-daemon.enable = true;
+  services.upower.enable = true;
 
   # Set your time zone.
   time.timeZone = "America/Chicago";
@@ -138,7 +147,7 @@
     gnumake
     go
     home-manager
-    jetbrains.idea-ultimate
+    jetbrains.idea
     kitty
     libtool
     libvterm
@@ -150,6 +159,7 @@
     postman
     polkit_gnome
     python3
+    psmisc
     ripgrep
     rofi
     socat
@@ -159,6 +169,7 @@
     waybar
     vscode
     xclip
+    yazi
     zip
   ];
 
