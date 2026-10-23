@@ -44,7 +44,12 @@
 
   programs.direnv.enable = true;
   programs.direnv.nix-direnv.enable = true;
-  programs.noctalia.enable = true;
+  programs.noctalia = {
+    enable = true;
+    settings = {
+      widget.network.show_label = false;
+    };
+  };
 
   programs.gnome-shell = {
     enable = true;

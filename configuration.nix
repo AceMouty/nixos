@@ -195,7 +195,6 @@
     libvterm
     neovim
     networkmanager
-    networkmanagerapplet
     nodejs_22
     pnpm_11
     postman
