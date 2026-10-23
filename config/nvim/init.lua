@@ -246,6 +246,7 @@ require("lz.n").load({
   },
 })
 
+-- this is a comment
 -- Telescope keymaps
 do
   local tmap = require("lz.n").keymap({

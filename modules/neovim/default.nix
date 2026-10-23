@@ -4,6 +4,17 @@ let
     inherit plugin;
     optional = true;
   };
+
+  spring-boot-nvim = pkgs.vimUtils.buildVimPlugin {
+    pname = "spring-boot.nvim";
+    version = "main";
+    src = pkgs.fetchFromGitHub {
+      owner = "JavaHello";
+      repo = "spring-boot.nvim";
+      rev = "main";
+      hash = "sha256-ioGlxjZIqtNlPedwI/HX3xA3HOWJ50WmWFyYIQPHDrg=";
+    };
+  };
 in
 {
   programs.neovim = {
@@ -23,6 +34,7 @@ in
       (withOptPlugin gitsigns-nvim)
       (withOptPlugin neo-tree-nvim)
       (withOptPlugin nvim-treesitter)
+      (withOptPlugin spring-boot-nvim)
 
       # parsers
       nvim-treesitter-parsers.nix

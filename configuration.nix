@@ -6,9 +6,6 @@
   pkgs,
   ...
 }:
-let
-  hyprshot-gui = pkgs.callPackage ./pkgs/hyprshot-gui { };
-in
 {
   imports = [
     # Include the results of the hardware scan.
@@ -22,10 +19,13 @@ in
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "nixos"; 
+  networking.hostName = "nixos";
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
-  nix.settings.experimental-features = ["nix-command" "flakes"];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
@@ -111,7 +111,13 @@ in
   users.users.ace = {
     isNormalUser = true;
     description = "ace";
-    extraGroups = ["networkmanager" "wheel" "docker" "audio" "video"];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "docker"
+      "audio"
+      "video"
+    ];
     shell = pkgs.zsh;
   };
 
@@ -119,6 +125,21 @@ in
   # $ nix search wget
   programs.hyprland.enable = true;
   fonts.fontDir.enable = true;
+
+  # --- Thunar
+  programs.thunar = {
+    enable = true;
+    plugins = with pkgs.xfce; [
+      thunar-archive-plugin
+      thunar-volman
+    ];
+  };
+
+  programs.dconf.enable = true;
+  services.gvfs.enable = true;
+  services.tumbler.enable = true;
+  # ---
+
   environment.systemPackages = with pkgs; [
     apple-cursor
     nerd-fonts.jetbrains-mono
@@ -171,6 +192,10 @@ in
     xclip
     yazi
     zip
+    # thunar deps
+    papirus-icon-theme
+    whitesur-gtk-theme
+    matcha-gtk-theme
   ];
 
   # Some programs need SUID wrappers, can be configured further or are

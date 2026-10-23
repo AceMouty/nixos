@@ -5,10 +5,12 @@
   inputs,
   pkgs-unstable,
   ...
-}: {
+}:
+{
   imports = [
     inputs.noctalia.homeModules.default
     ./modules/neovim
+    ./modules/thunar
   ];
 
   nixpkgs.config = {
@@ -20,14 +22,17 @@
     username = "ace";
     homeDirectory = "/home/ace";
     stateVersion = "24.11";
-    packages = (with pkgs; [
-      seahorse
-      libsecret
-    ])
-    ++ [ # needed for noctalia
-      pkgs-unstable.quickshell
-      pkgs-unstable.qt6.qtwayland
-    ];
+    packages =
+      (with pkgs; [
+        seahorse
+        libsecret
+        maven
+      ])
+      ++ [
+        # needed for noctalia
+        pkgs-unstable.quickshell
+        pkgs-unstable.qt6.qtwayland
+      ];
     pointerCursor = {
       name = "macOS";
       package = pkgs.apple-cursor;
@@ -43,19 +48,32 @@
   programs.gnome-shell = {
     enable = true;
     extensions = with pkgs; [
-      {package = gnomeExtensions.dash-to-dock;}
+      { package = gnomeExtensions.dash-to-dock; }
     ];
   };
 
-
-  programs.noctalia-shell = {
+  programs.java = {
     enable = true;
-    systemd.enable = true;
+    package = pkgs.javaPackages.compiler.temurin-bin.jdk-25;
   };
 
   dconf.settings = {
     "org/gnome/shell" = {
-      enabled-extensions = ["dash-to-dock@micgx.gmail.com"];
+      enabled-extensions = [ "dash-to-dock@micgx.gmail.com" ];
+    };
+  };
+
+  xdg.configFile."noctalia/colorschemes".source = ./config/noctalia/colorschemes;
+  programs.noctalia-shell = {
+    enable = true;
+    systemd.enable = true;
+    settings = {
+      colorSchemes.predefinedScheme = "MatchaDarkSea";
+      lockScreen = {
+        behavior = {
+          lockOnSuspend = true;
+        };
+      };
     };
   };
 
@@ -71,6 +89,14 @@
     };
   };
   xdg.configFile."nvim".source = ./config/nvim;
+
+  programs.kitty = {
+    enable = true;
+    settings = {
+      font_family = "JetBrainsMono Nerd Font";
+      confirm_os_window_close = 0;
+    };
+  };
 
   programs.zsh = {
     enable = true;
@@ -96,15 +122,7 @@
     oh-my-zsh = {
       enable = true;
       theme = "bira";
-      plugins = ["git"];
-    };
-  };
-
-  programs.kitty = {
-    enable = true;
-    settings = {
-      font_family = "JetBrainsMono Nerd Font";
-      confirm_os_window_close = 0;
+      plugins = [ "git" ];
     };
   };
 }
