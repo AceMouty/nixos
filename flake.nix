@@ -2,10 +2,10 @@
   description = "NixOS flake";
 
   inputs = {
-    nixpkgs.url = "nixpkgs/nixos-25.11"; # same as github:NixOs/nixpkgs/nixos-24.11
+    nixpkgs.url = "nixpkgs/nixos-26.05"; # same as github:NixOs/nixpkgs/nixos-24.11
     nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
 
-    home-manager.url = "github:nix-community/home-manager/release-25.11";
+    home-manager.url = "github:nix-community/home-manager/release-26.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     noctalia = {
@@ -14,38 +14,41 @@
     };
   };
 
-  outputs = {
-    nixpkgs,
-    home-manager,
-    ...
-  } @ inputs: let
-    lib = nixpkgs.lib;
+  outputs =
+    {
+      nixpkgs,
+      home-manager,
+      ...
+    }@inputs:
+    let
+      lib = nixpkgs.lib;
 
-    pkgs-unstable = import inputs.nixpkgs-unstable {
-      system = "x86_64-linux";
-      config.allowUnfree = true;
-    };
-  in {
-    # NixOS config
-    nixosConfigurations = {
-      # @attr nixos: matches host name defined in cofiguration.nix
-      nixos = lib.nixosSystem {
+      pkgs-unstable = import inputs.nixpkgs-unstable {
         system = "x86_64-linux";
-        #home-manager
-        modules = [
-          ./configuration.nix
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            # create a backup of some existing file not managed by hm
-            home-manager.backupFileExtension = "backup";
-	          # access inputs from home.nix
-            home-manager.extraSpecialArgs = { inherit inputs pkgs-unstable; };
-            home-manager.users.ace = ./home.nix;
-          }
-        ];
+        config.allowUnfree = true;
+      };
+    in
+    {
+      # NixOS config
+      nixosConfigurations = {
+        # @attr nixos: matches host name defined in cofiguration.nix
+        nixos = lib.nixosSystem {
+          system = "x86_64-linux";
+          #home-manager
+          modules = [
+            ./configuration.nix
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              # create a backup of some existing file not managed by hm
+              home-manager.backupFileExtension = "backup";
+              # access inputs from home.nix
+              home-manager.extraSpecialArgs = { inherit inputs pkgs-unstable; };
+              home-manager.users.ace = ./home.nix;
+            }
+          ];
+        };
       };
     };
-  };
 }
