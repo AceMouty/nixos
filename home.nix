@@ -8,7 +8,7 @@
 }:
 {
   imports = [
-    inputs.noctalia.homeModules.default
+    #    inputs.noctalia.homeModules.default
     ./modules/neovim
     ./modules/thunar
   ];
@@ -30,8 +30,8 @@
       ])
       ++ [
         # needed for noctalia
-        pkgs-unstable.quickshell
-        pkgs-unstable.qt6.qtwayland
+        #    pkgs-unstable.quickshell
+        #    pkgs-unstable.qt6.qtwayland
       ];
     pointerCursor = {
       name = "macOS";
@@ -63,31 +63,33 @@
     };
   };
 
-  xdg.configFile."noctalia/colorschemes".source = ./config/noctalia/colorschemes;
-  programs.noctalia-shell = {
-    enable = true;
-    systemd.enable = true;
-    settings = {
-      colorSchemes.predefinedScheme = "MatchaDarkSea";
-      lockScreen = {
-        behavior = {
-          lockOnSuspend = true;
-        };
-      };
-    };
-  };
+  #xdg.configFile."noctalia/colorschemes".source = ./config/noctalia/colorschemes;
+  #  programs.noctalia-shell = {
+  #    enable = true;
+  #    systemd.enable = true;
+  #    settings = {
+  #      colorSchemes.predefinedScheme = "MatchaDarkSea";
+  #      lockScreen = {
+  #        behavior = {
+  #          lockOnSuspend = true;
+  #        };
+  #      };
+  #    };
+  #  };
 
   # load hyprland
-  wayland.windowManager.hyprland.enable = true;
-  xdg.configFile."hypr".source = ./config/hypr;
-  xdg.configFile."hypr/hyprland.conf" = {
-    source = pkgs.replaceVars ./config/hypr/hyprland.conf {
-      gnomePolkit = pkgs.polkit_gnome;
-      # get nix to STFU
-      "DEFAULT_AUDIO_SINK" = null;
-      "DEFAULT_AUDIO_SOURCE" = null;
-    };
-  };
+  xdg.configFile."hypr".source =
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos/config/hypr";
+  #  wayland.windowManager.hyprland.enable = true;
+  #  xdg.configFile."hypr".source = ./config/hypr;
+  #  xdg.configFile."hypr/hyprland.conf" = {
+  #    source = pkgs.replaceVars ./config/hypr/hyprland.conf {
+  #      gnomePolkit = pkgs.polkit_gnome;
+  #      # get nix to STFU
+  #      "DEFAULT_AUDIO_SINK" = null;
+  #      "DEFAULT_AUDIO_SOURCE" = null;
+  #    };
+  #  };
   xdg.configFile."nvim".source = ./config/nvim;
 
   programs.kitty = {

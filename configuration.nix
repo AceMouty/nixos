@@ -27,6 +27,13 @@
     "flakes"
   ];
 
+  nix.settings = {
+    extra-substituters = [ "https://noctalia.cachix.org" ];
+    extra-trusted-public-keys = [
+      "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
+    ];
+  };
+
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
@@ -123,7 +130,21 @@
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  programs.hyprland.enable = true;
+  programs.hyprland = {
+    enable = true;
+    withUWSM = true;
+  };
+  systemd.user.services.polkit-gnome-agent = {
+    description = "polkit-gnome authentication agent";
+    wantedBy = [ "graphical-session.target" ];
+    partOf = [ "graphical-session.target" ];
+    after = [ "graphical-session.target" ];
+    unitConfig.ConditionEnvironment = "XDG_CURRENT_DESKTOP=Hyprland"; # GNOME has its own agent
+    serviceConfig = {
+      ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+      Restart = "on-failure";
+    };
+  };
   fonts.fontDir.enable = true;
 
   # --- Thunar
@@ -176,15 +197,14 @@
     networkmanager
     networkmanagerapplet
     nodejs_22
-    pnpm_9
+    pnpm_11
     postman
-    polkit_gnome
     python3
     psmisc
     ripgrep
     rofi
     socat
-    swww
+    awww
     tree
     unzip
     waybar
