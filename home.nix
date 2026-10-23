@@ -8,7 +8,7 @@
 }:
 {
   imports = [
-    #    inputs.noctalia.homeModules.default
+    inputs.noctalia.homeModules.default
     ./modules/neovim
     ./modules/thunar
   ];
@@ -44,6 +44,7 @@
 
   programs.direnv.enable = true;
   programs.direnv.nix-direnv.enable = true;
+  programs.noctalia.enable = true;
 
   programs.gnome-shell = {
     enable = true;

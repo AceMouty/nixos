@@ -49,11 +49,9 @@ local menu        = "hyprlauncher"
 -- Autostart necessary processes (like notifications daemons, status bars, etc.)
 -- Or execute your favorite apps at launch like this:
 --
--- hl.on("hyprland.start", function ()
---   hl.exec_cmd(terminal)
---   hl.exec_cmd("nm-applet")
---   hl.exec_cmd("waybar & hyprpaper & firefox")
--- end)
+hl.on("hyprland.start", function()
+  hl.exec_cmd("noctalia")
+end)
 
 
 -------------------------------
@@ -188,7 +186,7 @@ hl.animation({ leaf = "zoomFactor", enabled = true, speed = 7, bezier = "quick" 
 -- See https://wiki.hypr.land/Configuring/Layouts/Dwindle-Layout/ for more
 hl.config({
   dwindle = {
-    preserve_split = true,     -- You probably want this
+    preserve_split = true, -- You probably want this
   },
 })
 
@@ -212,8 +210,8 @@ hl.config({
 
 hl.config({
   misc = {
-    force_default_wallpaper = -1,        -- Set to 0 or 1 to disable the anime mascot wallpapers
-    disable_hyprland_logo   = false,     -- If true disables the random hyprland logo / anime girl background. :(
+    force_default_wallpaper = -1,    -- Set to 0 or 1 to disable the anime mascot wallpapers
+    disable_hyprland_logo   = false, -- If true disables the random hyprland logo / anime girl background. :(
   },
 })
 
@@ -232,7 +230,7 @@ hl.config({
 
     follow_mouse = 1,
 
-    sensitivity  = 0,    -- -1.0 - 1.0, 0 means no modification.
+    sensitivity  = 0, -- -1.0 - 1.0, 0 means no modification.
 
     touchpad     = {
       natural_scroll = false,
@@ -258,11 +256,17 @@ hl.device({
 ---- KEYBINDINGS ----
 ---------------------
 
-local mainMod = "SUPER" -- Sets "Windows" key as main modifier
+local mainMod = "ALT" -- Sets "Windows" key as main modifier
+
+-- noctalia ipc
+local nocIpc = "noctalia msg "
 
 -- Example binds, see https://wiki.hypr.land/Configuring/Basics/Binds/ for more
+hl.bind(mainMod .. " + SPACE", hl.dsp.exec_cmd(nocIpc .. "panel-toggle launcher"))
+
 hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd(terminal))
-local closeWindowBind = hl.bind(mainMod .. " + C", hl.dsp.window.close())
+hl.bind(mainMod .. " + C", hl.dsp.window.close())
+-- local closeWindowBind = hl.bind(mainMod .. " + C", hl.dsp.window.close())
 -- closeWindowBind:set_enabled(false)
 hl.bind(mainMod .. " + M",
   hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))
@@ -281,7 +285,7 @@ hl.bind(mainMod .. " + down", hl.dsp.focus({ direction = "down" }))
 -- Switch workspaces with mainMod + [0-9]
 -- Move active window to a workspace with mainMod + SHIFT + [0-9]
 for i = 1, 10 do
-  local key = i % 10   -- 10 maps to key 0
+  local key = i % 10 -- 10 maps to key 0
   hl.bind(mainMod .. " + " .. key, hl.dsp.focus({ workspace = i }))
   hl.bind(mainMod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = i }))
 end
@@ -299,16 +303,11 @@ hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
 hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
 -- Laptop multimedia keys for volume and LCD brightness
-hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"),
-  { locked = true, repeating = true })
-hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"),
-  { locked = true, repeating = true })
-hl.bind("XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"),
-  { locked = true, repeating = true })
-hl.bind("XF86AudioMicMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"),
-  { locked = true, repeating = true })
-hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%+"), { locked = true, repeating = true })
-hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%-"), { locked = true, repeating = true })
+hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd(nocIpc .. "volume-up"))
+hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd(nocIpc .. "volume-down"))
+hl.bind("XF86AudioMute", hl.dsp.exec_cmd(nocIpc .. "volume-mute"))
+hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd(nocIpc .. "brightness-up"))
+hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd(nocIpc .. "brightness-down"))
 
 -- Requires playerctl
 hl.bind("XF86AudioNext", hl.dsp.exec_cmd("playerctl next"), { locked = true })
@@ -365,4 +364,26 @@ hl.window_rule({
 
   move  = "20 monitor_h-120",
   float = true,
+})
+
+--------------------------------
+---- Noctalia Rules ------------
+--------------------------------
+-- settings window floats
+hl.window_rule({
+  match = { class = "dev.noctalia.Noctalia" },
+  float = true,
+  size = { 1080, 920 },
+})
+
+-- blur for bar/panels; let Noctalia handle its own animations
+hl.layer_rule({
+  name = "noctalia",
+  match = {
+    namespace = "^noctalia-(bar-.+|notification|dock|panel|attached-panel|osd|window-switcher)$",
+  },
+  no_anim = true,
+  ignore_alpha = 0.5,
+  blur = true,
+  blur_popups = true,
 })
