@@ -96,7 +96,7 @@
   #      "DEFAULT_AUDIO_SOURCE" = null;
   #    };
   #  };
-  xdg.configFile."nvim".source = ./config/nvim;
+  # nvim config symlink lives in modules/neovim
 
   programs.kitty = {
     enable = true;
@@ -108,10 +108,6 @@
 
   programs.zsh = {
     enable = true;
-    sessionVariables = {
-      EDITOR = "nvim";
-    };
-
     shellAliases = {
       rebuild = "sudo nixos-rebuild switch --flake .";
       pg-shell = "nix-shell $HOME/nixos/shells/postgres.nix";

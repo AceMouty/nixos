@@ -9,6 +9,12 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     noctalia.url = "github:noctalia-dev/noctalia/cachix";
+
+    # Neovim plugins that aren't in nixpkgs. `flake = false` = just the source.
+    spring-boot-nvim = {
+      url = "github:JavaHello/spring-boot.nvim";
+      flake = false;
+    };
     #    noctalia = {
     #  url = "github:noctalia-dev/noctalia-shell";
     #  inputs.nixpkgs.follows = "nixpkgs-unstable";

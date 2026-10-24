@@ -193,7 +193,6 @@
     kitty
     libtool
     libvterm
-    neovim
     networkmanager
     nodejs_22
     pnpm_11
