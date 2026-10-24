@@ -43,6 +43,11 @@ let
   );
 in
 {
+  # Live-edit the Lua config: ~/.config/nvim points at the repo checkout, so
+  # changing Lua never needs a rebuild. Only plugin/tool changes do.
+  xdg.configFile."nvim".source =
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos/config/nvim";
+
   programs.neovim = {
     enable = true;
     defaultEditor = true; # sets EDITOR; replaces the zsh sessionVariable
@@ -52,9 +57,10 @@ in
     withRuby = false; # no Ruby/Python remote plugins in this config
     withPython3 = false;
 
-    # Never let Home Manager write ~/.config/nvim/init.lua. That directory is
-    # yours (symlinked below); Nix-provided values come in through initLua,
-    # which the wrapper runs *before* your init.lua.
+    # Never let Home Manager write ~/.config/nvim/init.lua.
+    # That directory is mine (symlinked above);
+    # Nix-provided values come in through initLua,
+    # which the wrapper runs *before* init.lua.
     sideloadInitLua = true;
     initLua = ''
       vim.g.nix = {
@@ -103,9 +109,4 @@ in
       fd
     ];
   };
-
-  # Live-edit the Lua config: ~/.config/nvim points at the repo checkout, so
-  # changing Lua never needs a rebuild. Only plugin/tool changes do.
-  xdg.configFile."nvim".source =
-    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos/config/nvim";
 }

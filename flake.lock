@@ -86,7 +86,24 @@
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable",
-        "noctalia": "noctalia"
+        "noctalia": "noctalia",
+        "spring-boot-nvim": "spring-boot-nvim"
+      }
+    },
+    "spring-boot-nvim": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1790230538,
+        "narHash": "sha256-+zgi9Jhh5f3kPr5VC2KZ3x7OEXdTao5gQM48y5NlGo4=",
+        "owner": "JavaHello",
+        "repo": "spring-boot.nvim",
+        "rev": "9880be48170a21d97444b1eba75853fd3bad33c3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "JavaHello",
+        "repo": "spring-boot.nvim",
+        "type": "github"
       }
     }
   },

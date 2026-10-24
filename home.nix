@@ -42,6 +42,12 @@
     };
   };
 
+  dconf.settings = {
+    "org/gnome/shell" = {
+      enabled-extensions = [ "dash-to-dock@micgx.gmail.com" ];
+    };
+  };
+
   programs.direnv.enable = true;
   programs.direnv.nix-direnv.enable = true;
   programs.noctalia = {
@@ -63,10 +69,19 @@
     package = pkgs.javaPackages.compiler.temurin-bin.jdk-25;
   };
 
-  dconf.settings = {
-    "org/gnome/shell" = {
-      enabled-extensions = [ "dash-to-dock@micgx.gmail.com" ];
+  programs.git.enable = true; # delta only hooks into git when Home Manager manages your git config
+  programs.delta = {
+    enable = true;
+    enableGitIntegration = true;
+    options = {
+      side-by-side = true; # left = old, right = new
+      line-numbers = true;
+      navigate = true; # n / N jump between files in the pager
+      syntax-theme = "Nord";
     };
+  };
+  programs.git.settings = {
+    merge.conflictStyle = "zdiff3"; # delta draws conflict blocks nicely too
   };
 
   #xdg.configFile."noctalia/colorschemes".source = ./config/noctalia/colorschemes;
@@ -86,16 +101,6 @@
   # load hyprland
   xdg.configFile."hypr".source =
     config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nixos/config/hypr";
-  #  wayland.windowManager.hyprland.enable = true;
-  #  xdg.configFile."hypr".source = ./config/hypr;
-  #  xdg.configFile."hypr/hyprland.conf" = {
-  #    source = pkgs.replaceVars ./config/hypr/hyprland.conf {
-  #      gnomePolkit = pkgs.polkit_gnome;
-  #      # get nix to STFU
-  #      "DEFAULT_AUDIO_SINK" = null;
-  #      "DEFAULT_AUDIO_SOURCE" = null;
-  #    };
-  #  };
   # nvim config symlink lives in modules/neovim
 
   programs.kitty = {

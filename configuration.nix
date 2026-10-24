@@ -163,8 +163,8 @@
 
   environment.systemPackages = with pkgs; [
     apple-cursor
-    nerd-fonts.jetbrains-mono
     awscli2
+    awww
     bat
     brave
     brightnessctl
@@ -183,9 +183,8 @@
     firefox
     flameshot
     git
-    gnome-tweaks
     gnome-keyring
-    polkit_gnome
+    gnome-tweaks
     gnumake
     go
     home-manager
@@ -193,22 +192,24 @@
     kitty
     libtool
     libvterm
+    nerd-fonts.jetbrains-mono
     networkmanager
     nodejs_22
     pnpm_11
+    polkit_gnome
     postman
-    python3
     psmisc
+    python3
     ripgrep
     rofi
     socat
-    awww
     tree
     unzip
-    waybar
     vscode
+    waybar
     xclip
     yazi
+    zoxide
     zip
     # thunar deps
     papirus-icon-theme
